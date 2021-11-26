@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.activity_create_note.*
 import kotlinx.android.synthetic.main.layout_delete.*
 import kotlinx.android.synthetic.main.layout_url.*
 import kotlinx.android.synthetic.main.layout_url.view.*
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -85,9 +86,114 @@ class CreateNoteActivity : AppCompatActivity(){
             selectImagePath = ""
         }
 
+        fabSaveNote.setOnClickListener(View.OnClickListener {
+            if (editTextTitle.getText().toString().isEmpty(){
+                Toast.makeText(this@CreateNoteActivity, "Judul Tidak Boleh Kosong", Toast.LENGTH_SHORT).show()
+                    return@OnClickListener
+                } else if(editTextSubTitle.getText().toString().isEmpty() && editTextDesc.getText().toString().isEmpty()){
+                    Toast.makeText(this@CreateNoteActivity, "Catatan Tidak Boleh Kosong", Toast.LENGTH_SHORT).show()
+                return@OnClickListener
+            }
+            val modelNote = ModelNote()
+            modelNote.title = editTextTitle.getText().toString()
+            modelNote.subTitle = editTextSubTitle.getText().toString()
+            modelNote.noteText = editTextDesc.getText().toString()
+            modelNote.dateTime = tvDateTime.getText().toString()
+            modelNote.imagePath = selectImagePath
+
+            if (tvUrlNote.visibility() == View.VISIBLE) {
+                modelNote.url = tvUrlNote.getText().toString()
+                btnHapusUrl.visibility = View.VISIBLE
+            }
+
+            if (modelNoteExtra != null) {
+                modelNote.id = modelNoteExtra!!.id
+            }
+
+            class saveNoteAsyncTask : AsyncTask<Void?, Void?, Void?>(){
+                override fun doInBackground(vararg p0: Void?): Void? {
+                    NoteDatabase.getInstance(applicationContext)?.noteDeo()?.insert(modelNote)
+                    return null
+                }
+
+                override fun onPostExecute(aVoid: Void?) {
+                    super.onPostExecute(aVoid)
+                    val intent = Intent()
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+            }
+            saveNoteAsyncTask().execute())
+        })
+
     }
 
+    @SuppressLint("RestrictedApi")
     private fun setViewOrUpdateNote() {
-        TODO("Not yet implemented")
+        editTextTitle.setText(modelNoteExtra?.title)
+        editTextSubTitle.setText(modelNoteExtra?.subTitle)
+        editTextDesc.setText(modelNoteExtra?.noteText)
+
+        if (modelNoteExtra?.imagePath != null && modelNoteExtra?.imagePath?.trim()?.isEmpty()!!){
+            imageNote.setImageBitmap(BitmapFactory.decodeFile(modelNoteExtra?.imagePath))
+            imageNote.visibility = View.VISIBLE
+            selectImagePath = modelNoteExtra?.imagePath
+            fabDeleteImage.visibility = View.VISIBLE
+        }
+
+        if (modelNoteExtra.url != null && modelNoteExtra?.url?.isEmpty()!!){
+            tvUrlNote.text = modelNoteExtra?.url
+            tvUrlNote.visibility = View.VISIBLE
+            btnHapusUrl.visibility = View.VISIBLE
+        }
+    }
+
+    private fun selectImage(){
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        if (intent.resolveActivity(packageManager) != null){
+            startActivityForResult(intent, REQUEST_SELECT)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_PERMISSION && grantResults.size > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                selectImage()
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_SELECT && resultCode == RESULT_OK){
+            if (data != null){
+                val selectImgUri == data.data
+                if (selectImgUri != null){
+                    try {
+                        val inputStream = contentResolver.openInputStream(selectImgUri)
+                        val bitmap = BitmapFactory.decodeStream(inputStream)
+                        imageNote.setImageBitmap(bitmap)
+                        imageNote.visibility == View.VISIBLE
+                        fabDeleteImage.visibility == View.VISIBLE
+                        selectImagePath = getPathFromUri(selectImgUri)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getPathFromUri(contentUri : Uri) : String?{
+
     }
 }
