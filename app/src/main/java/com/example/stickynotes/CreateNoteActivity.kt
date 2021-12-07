@@ -31,55 +31,65 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CreateNoteActivity : AppCompatActivity(){
-    var alertDialog : AlertDialog? = null
-    var selectImagePath : String? = null
-    var modelNoteExtra : ModelNote? = null
+class CreateNoteActivity : AppCompatActivity() {
+    var alertDialog: AlertDialog? = null
+    var selectImagePath: String? = null
+    var modelNoteExtra: ModelNote? = null
 
     @SuppressLint("SetTextI18n", "RestrictedApi")
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_note)
 
         //Hari, Tanggal bulan tahun, jam a = malam m = pagi
-        tvDateTime.setText("Terakhir diubah : " + SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date()))
+        tvDateTime.setText(
+            "Terakhir diubah : " + SimpleDateFormat(
+                "dd MMMM yyyy",
+                Locale.getDefault()
+            ).format(Date())
+        )
 
         //Image Path
         selectImagePath = ""
 
-        if(intent.getBooleanExtra("EXTRA", false)){
+        if (intent.getBooleanExtra("EXTRA", false)) {
             modelNoteExtra = intent.getSerializableExtra("EXTRA_NOTE") as ModelNote
             setViewOrUpdateNote()
         }
 
-        if (modelNoteExtra != null){
+        if (modelNoteExtra != null) {
             linearDelete.visibility = View.VISIBLE
             btnDelete.setOnClickListener {
                 showDeleteDialog()
             }
         }
 
-        btnHapusUrl.setOnClickListener{
+        btnHapusUrl.setOnClickListener {
             tvUrlNote.setText(null)
             tvUrlNote.setVisibility(View.GONE)
             btnHapusUrl.setVisibility(View.GONE)
         }
 
-        btnAddUrl.setOnClickListener{
+        btnAddUrl.setOnClickListener {
             showDialogUrl()
         }
 
-        btnAddImage.setOnClickListener{
-            if(ContextCompat.checkSelfPermission(applicationContext,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this@CreateNoteActivity,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_PERMISSION)
+        btnAddImage.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this@CreateNoteActivity,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_PERMISSION
+                )
             } else {
                 selectImage()
             }
         }
 
-        fabDeleteImage.setOnClickListener{
+        fabDeleteImage.setOnClickListener {
             imageNote.setImageBitmap(null)
             imageNote.setVisibility(View.GONE)
             fabDeleteImage.setVisibility(View.GONE)
@@ -87,11 +97,21 @@ class CreateNoteActivity : AppCompatActivity(){
         }
 
         fabSaveNote.setOnClickListener(View.OnClickListener {
-            if (editTextTitle.getText().toString().isEmpty(){
-                Toast.makeText(this@CreateNoteActivity, "Judul Tidak Boleh Kosong", Toast.LENGTH_SHORT).show()
+            if (editTextTitle.getText().toString().isEmpty() {
+                    Toast.makeText(
+                        this@CreateNoteActivity,
+                        "Judul Tidak Boleh Kosong",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@OnClickListener
-                } else if(editTextSubTitle.getText().toString().isEmpty() && editTextDesc.getText().toString().isEmpty()){
-                    Toast.makeText(this@CreateNoteActivity, "Catatan Tidak Boleh Kosong", Toast.LENGTH_SHORT).show()
+                } else if (editTextSubTitle.getText().toString().isEmpty() && editTextDesc.getText()
+                    .toString().isEmpty()
+            ) {
+                Toast.makeText(
+                    this@CreateNoteActivity,
+                    "Catatan Tidak Boleh Kosong",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@OnClickListener
             }
             val modelNote = ModelNote()
@@ -110,7 +130,7 @@ class CreateNoteActivity : AppCompatActivity(){
                 modelNote.id = modelNoteExtra!!.id
             }
 
-            class saveNoteAsyncTask : AsyncTask<Void?, Void?, Void?>(){
+            class saveNoteAsyncTask : AsyncTask<Void?, Void?, Void?>() {
                 override fun doInBackground(vararg p0: Void?): Void? {
                     NoteDatabase.getInstance(applicationContext)?.noteDeo()?.insert(modelNote)
                     return null
@@ -134,23 +154,23 @@ class CreateNoteActivity : AppCompatActivity(){
         editTextSubTitle.setText(modelNoteExtra?.subTitle)
         editTextDesc.setText(modelNoteExtra?.noteText)
 
-        if (modelNoteExtra?.imagePath != null && modelNoteExtra?.imagePath?.trim()?.isEmpty()!!){
+        if (modelNoteExtra?.imagePath != null && modelNoteExtra?.imagePath?.trim()?.isEmpty()!!) {
             imageNote.setImageBitmap(BitmapFactory.decodeFile(modelNoteExtra?.imagePath))
             imageNote.visibility = View.VISIBLE
             selectImagePath = modelNoteExtra?.imagePath
             fabDeleteImage.visibility = View.VISIBLE
         }
 
-        if (modelNoteExtra.url != null && modelNoteExtra?.url?.isEmpty()!!){
+        if (modelNoteExtra.url != null && modelNoteExtra?.url?.isEmpty()!!) {
             tvUrlNote.text = modelNoteExtra?.url
             tvUrlNote.visibility = View.VISIBLE
             btnHapusUrl.visibility = View.VISIBLE
         }
     }
 
-    private fun selectImage(){
+    private fun selectImage() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        if (intent.resolveActivity(packageManager) != null){
+        if (intent.resolveActivity(packageManager) != null) {
             startActivityForResult(intent, REQUEST_SELECT)
         }
     }
@@ -162,7 +182,7 @@ class CreateNoteActivity : AppCompatActivity(){
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_PERMISSION && grantResults.size > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 selectImage()
             } else {
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
@@ -173,10 +193,10 @@ class CreateNoteActivity : AppCompatActivity(){
     @SuppressLint("RestrictedApi")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_SELECT && resultCode == RESULT_OK){
-            if (data != null){
+        if (requestCode == REQUEST_SELECT && resultCode == RESULT_OK) {
+            if (data != null) {
                 val selectImgUri == data.data
-                if (selectImgUri != null){
+                if (selectImgUri != null) {
                     try {
                         val inputStream = contentResolver.openInputStream(selectImgUri)
                         val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -193,7 +213,90 @@ class CreateNoteActivity : AppCompatActivity(){
         }
     }
 
-    private fun getPathFromUri(contentUri : Uri) : String?{
-
+    private fun getPathFromUri(contentUri: Uri): String? {
+        val filepath: String?
+        val cursor = contentResolver.query(contentUri, null, null, null, null)
+        if (cursor = null) {
+            filepath = contentUri.path
+        } else {
+            cursor.moveToFirst()
+            val index = cursor.getColumnIndex("_data")
+            filepath = cursor.getString(index)
+            cursor.close()
+        }
+        return filepath
     }
+
+    private fun showDeleteDialog() {
+        val dialog = Dialog(this @CreateNoteActivity)
+        dialog.setContentView(R.layout.layout_delete)
+        dialog.tvHapusCatatan.setOnClickListener {
+            class HapusNoteAsyncTask : AsyncTask<Void?, Void?, Void?>() {
+                private fun doInBackground(var p0: Void?): Void? {
+                    NoteDatabase.getInstance(applicationContext)?.noteDao()?.delete(modelNoteExtra)
+                    return null
+                }
+
+                private fun onPostExecute(aVoid: Void?) {
+                    super.onPostExecute(aVoid)
+                    val intent = Intent()
+                    intent.putExtra("NoteDelete", true)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+            }
+            HapusNoteAsyncTask().execute()
+        }
+        dialog.tvBatalHapus.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showDialogUrl() {
+        if (alertDialog == null) {
+            val builder = AlertDialog.Builder(this @CreateNoteActivity)
+            val view = LayoutInflater.from(this)
+                .inflate(R.layout.Layout_url, findViewById(R.id.layoutUrl) as? ViewGroup)
+            builder.setView(view)
+
+            alertDialog = builder.create()
+            if (alertDialog?.window != null) {
+                alertDialog?.window?.setBackgroundDrawable(ColorDrawable(0))
+            }
+
+            val etUrl = view.editTextAddUrl
+            etUrl.requestFocus()
+
+            view.tvOk.setOnClickListener {
+                if (etUrl.text.toString().trim().isEmpty()) {
+                    Toast.makeText(this @CreateNoteActivity, "Masukan Url", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (!Patterns.WEB_URL.matcher(etUrl.text.toString()).matches()) {
+                    Toast.makeText(
+                        this @CreateNoteActivity,
+                        "Url Anda Tidak Benar",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    tvUrlNote.text = etUrl.text.toString()
+                    tvUrlNote.visibility = View.VISIBLE
+                    btnHapusUrl.visibility = View.VISIBLE
+                    alertDialog?.dismiss()
+                }
+            }
+            view.tvBatal.setOnClickListener {
+                alertDialog?.dismiss()
+            }
+        }
+        alertDialog?.show()
+    }
+
+    companion object {
+        private const val REQUEST_PERMISSION = 1
+        private const val REQUEST_SELECT = 2
+    }
+
+}}
+
 }
