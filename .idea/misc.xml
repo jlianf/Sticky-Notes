@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/activity_create_note.xml" value="0.22" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/layout_delete.xml" value="0.17083333333333334" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/layout_url.xml" value="0.17083333333333334" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/list_item_note.xml" value="0.17083333333333334" />
       </map>
     </option>
   </component>

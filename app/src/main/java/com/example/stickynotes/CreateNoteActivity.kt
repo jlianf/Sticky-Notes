@@ -297,6 +297,6 @@ class CreateNoteActivity : AppCompatActivity() {
         private const val REQUEST_SELECT = 2
     }
 
-}}
+}
 
 }
