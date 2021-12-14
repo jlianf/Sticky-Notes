@@ -3,10 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/background_view.xml" value="0.18697916666666667" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/bg_rounded_rect.xml" value="0.18697916666666667" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/ic_add_note.xml" value="0.18697916666666667" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/ic_delete.xml" value="0.18697916666666667" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/ic_image_add.xml" value="0.18697916666666667" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/ic_launcher_background.xml" value="0.18697916666666667" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/ic_microphone.xml" value="0.18697916666666667" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/drawable/ic_web_add.xml" value="0.18697916666666667" />
         <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/activity_create_note.xml" value="0.22" />
         <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/layout_delete.xml" value="0.17083333333333334" />
         <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/layout_url.xml" value="0.17083333333333334" />
         <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/list_item_note.xml" value="0.17083333333333334" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/menu_main.xml" value="0.17083333333333334" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/menu_select.xml" value="0.17083333333333334" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/layout/styles.xml" value="0.15677083333333333" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/menu/menu_main.xml" value="0.1" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/menu/menu_select.xml" value="0.17083333333333334" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/Side Job/Project/Play Store/Sticky Notes/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
       </map>
     </option>
   </component>

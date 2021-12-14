@@ -1,19 +1,17 @@
-package com.example.stickynotes
+package com.example.stickynotes.activities
 
 import android.annotation.SuppressLint
-import android.app.DownloadManager
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.modelNote.R
+import com.example.stickynotes.R
+import com.example.stickynotes.database.NoteDatabase
 import com.example.stickynotes.adapter.NoteAdapter
-import com.example.stickynotes.databses.NoteDatabase
 import com.example.stickynotes.model.ModelNote
 import com.example.stickynotes.utils.onClickItemListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,7 +26,7 @@ class MainActivity : AppCompatActivity(), onClickItemListener {
     private var onClickPosition = -1
 
     @SuppressLint("Assert")
-    override fun onCreate(savedInstanceState: Bundle=?){
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity(), onClickItemListener {
         rvListNote.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
     }
 
-    private fun ModeList(){
+    private fun modeList(){
         rvListNote.layoutManager = LinearLayoutManager(this)
     }
 
@@ -62,10 +60,10 @@ class MainActivity : AppCompatActivity(), onClickItemListener {
 
         @Suppress("UNCHECKED_CAST")
         class GetNoteAsyncTask : AsyncTask<Void?, Void?, List<ModelNote>>() {
-            private fun doInBackground(var p0: Void?): List<ModelNote>?{
-                return NoteDatabase.getInstance(this@MainActivity).noteDao().allnote as List<ModelNote>?
+            private fun doInBackground(p0: Void?): List<ModelNote>?{
+                return NoteDatabase.getInstance(this@MainActivity)!!.noteDao()?.allNote as List<ModelNote>?
             }
-            private fun onPostExecute(notes: List<ModelNote>) {
+            override fun onPostExecute(notes: List<ModelNote>) {
                 super.onPostExecute(notes)
                 if (requestCode == REQUEST_SHOW) {
                     modelNoteList.addAll(notes)

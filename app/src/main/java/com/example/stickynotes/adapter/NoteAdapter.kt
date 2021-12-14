@@ -1,4 +1,4 @@
-package com.example.stickynotes
+package com.example.stickynotes.adapter
 
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -7,11 +7,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stickynotes.model.ModelNote
+import com.example.stickynotes.R
+import com.example.stickynotes.utils.onClickItemListener
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.list_item_note.view.*
 
 class NoteAdapter(private val modelNoteListFilter: List<ModelNote>,
-private val onClickItem: onClickItemListener): RecyclerView.Adapter<NoteViewHolder>() {
+                  private val onClickItem: onClickItemListener
+): RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_note, parent, false)

@@ -1,4 +1,4 @@
-package com.example.stickynotes
+package com.example.stickynotes.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -20,14 +20,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.modelNote.R
-import com.example.stickynotes.database.NoteDatabase
 import com.example.stickynotes.model.ModelNote
+import com.example.stickynotes.database.NoteDatabase
+import com.example.stickynotes.R
 import kotlinx.android.synthetic.main.activity_create_note.*
 import kotlinx.android.synthetic.main.layout_delete.*
 import kotlinx.android.synthetic.main.layout_url.*
 import kotlinx.android.synthetic.main.layout_url.view.*
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -97,7 +96,7 @@ class CreateNoteActivity : AppCompatActivity() {
         }
 
         fabSaveNote.setOnClickListener(View.OnClickListener {
-            if (editTextTitle.getText().toString().isEmpty() {
+            if (editTextTitle.getText().toString().isEmpty()) {
                     Toast.makeText(
                         this@CreateNoteActivity,
                         "Judul Tidak Boleh Kosong",
@@ -121,7 +120,7 @@ class CreateNoteActivity : AppCompatActivity() {
             modelNote.dateTime = tvDateTime.getText().toString()
             modelNote.imagePath = selectImagePath
 
-            if (tvUrlNote.visibility() == View.VISIBLE) {
+            if (tvUrlNote.getVisibility() == View.VISIBLE) {
                 modelNote.url = tvUrlNote.getText().toString()
                 btnHapusUrl.visibility = View.VISIBLE
             }
@@ -132,7 +131,7 @@ class CreateNoteActivity : AppCompatActivity() {
 
             class saveNoteAsyncTask : AsyncTask<Void?, Void?, Void?>() {
                 override fun doInBackground(vararg p0: Void?): Void? {
-                    NoteDatabase.getInstance(applicationContext)?.noteDeo()?.insert(modelNote)
+                    NoteDatabase.getInstance(applicationContext)?.noteDao()?.insert(modelNote)
                     return null
                 }
 
@@ -143,7 +142,7 @@ class CreateNoteActivity : AppCompatActivity() {
                     finish()
                 }
             }
-            saveNoteAsyncTask().execute())
+            saveNoteAsyncTask().execute()
         })
 
     }
@@ -161,7 +160,7 @@ class CreateNoteActivity : AppCompatActivity() {
             fabDeleteImage.visibility = View.VISIBLE
         }
 
-        if (modelNoteExtra.url != null && modelNoteExtra?.url?.isEmpty()!!) {
+        if (modelNoteExtra?.url != null && modelNoteExtra?.url?.isEmpty()!!) {
             tvUrlNote.text = modelNoteExtra?.url
             tvUrlNote.visibility = View.VISIBLE
             btnHapusUrl.visibility = View.VISIBLE
@@ -195,7 +194,7 @@ class CreateNoteActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT && resultCode == RESULT_OK) {
             if (data != null) {
-                val selectImgUri == data.data
+                val selectImgUri = data.data
                 if (selectImgUri != null) {
                     try {
                         val inputStream = contentResolver.openInputStream(selectImgUri)
@@ -216,7 +215,7 @@ class CreateNoteActivity : AppCompatActivity() {
     private fun getPathFromUri(contentUri: Uri): String? {
         val filepath: String?
         val cursor = contentResolver.query(contentUri, null, null, null, null)
-        if (cursor = null) {
+        if (cursor == null) {
             filepath = contentUri.path
         } else {
             cursor.moveToFirst()
@@ -228,11 +227,11 @@ class CreateNoteActivity : AppCompatActivity() {
     }
 
     private fun showDeleteDialog() {
-        val dialog = Dialog(this @CreateNoteActivity)
+        val dialog = Dialog(this@CreateNoteActivity)
         dialog.setContentView(R.layout.layout_delete)
         dialog.tvHapusCatatan.setOnClickListener {
             class HapusNoteAsyncTask : AsyncTask<Void?, Void?, Void?>() {
-                private fun doInBackground(var p0: Void?): Void? {
+                private fun doInBackground(p0: Void?): Void? {
                     NoteDatabase.getInstance(applicationContext)?.noteDao()?.delete(modelNoteExtra)
                     return null
                 }
@@ -255,9 +254,9 @@ class CreateNoteActivity : AppCompatActivity() {
 
     private fun showDialogUrl() {
         if (alertDialog == null) {
-            val builder = AlertDialog.Builder(this @CreateNoteActivity)
+            val builder = AlertDialog.Builder(this@CreateNoteActivity)
             val view = LayoutInflater.from(this)
-                .inflate(R.layout.Layout_url, findViewById(R.id.layoutUrl) as? ViewGroup)
+                .inflate(R.layout.layout_url, findViewById(R.id.layoutUrl) as? ViewGroup)
             builder.setView(view)
 
             alertDialog = builder.create()
@@ -270,11 +269,11 @@ class CreateNoteActivity : AppCompatActivity() {
 
             view.tvOk.setOnClickListener {
                 if (etUrl.text.toString().trim().isEmpty()) {
-                    Toast.makeText(this @CreateNoteActivity, "Masukan Url", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@CreateNoteActivity, "Masukan Url", Toast.LENGTH_SHORT)
                         .show()
                 } else if (!Patterns.WEB_URL.matcher(etUrl.text.toString()).matches()) {
                     Toast.makeText(
-                        this @CreateNoteActivity,
+                        this@CreateNoteActivity,
                         "Url Anda Tidak Benar",
                         Toast.LENGTH_SHORT
                     ).show()

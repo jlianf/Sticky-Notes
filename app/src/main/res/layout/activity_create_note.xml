@@ -270,7 +270,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Delete"
-                        android:textColor="@color/color_Accent"
+                        android:textColor="@color/colorAccent"
                         android:textSize="12sp"
                         android:textStyle="bold"/>
 

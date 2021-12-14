@@ -1,4 +1,4 @@
-package com.example.stickynotes
+package com.example.stickynotes.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
